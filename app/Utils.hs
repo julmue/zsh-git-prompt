@@ -29,9 +29,9 @@ showStatusNumbers (MakeStatus s x c t) = show <$> [s, x, c, t]
 
 showRemoteNumbers :: Maybe Remote -> [String]
 showRemoteNumbers mremote = show <$> [ahead, behind]
-	where
-		(ahead, behind) = fromMaybe (0,0)  -- the script needs some value, (0,0) means no display
-			$ pairFromDistance <$> (getDistance =<< mremote)
+  where
+    (ahead, behind) = fromMaybe (0,0)  -- the script needs some value, (0,0) means no display
+        $ pairFromDistance <$> (getDistance =<< mremote)
 
 showBranchInfo :: BranchInfo -> [String]
 showBranchInfo (MkBranchInfo branch mremote) = show branch : showRemoteNumbers mremote
@@ -44,13 +44,13 @@ branchOrHashWith c (Just hash) Nothing = showBranchInfo $ MkBranchInfo (MkBranch
 branchOrHashWith _ Nothing _ = showBranchInfo $ MkBranchInfo (MkBranch "") Nothing
 
 allStrings :: Maybe Hash
-			-> GitInfo 
-			-> [String]
+        -> GitInfo
+        -> [String]
 allStrings mhash (MkGitInfo bi stat) = branchOrHashWith ':' mhash bi ++  showStatusNumbers stat
 
 stringsFromStatus :: Maybe Hash
-					-> String -- status
-					-> Maybe [String]
+            -> String -- status
+            -> Maybe [String]
 stringsFromStatus h = fmap  (allStrings h) . processGitStatus . lines
 
 
